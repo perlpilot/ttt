@@ -1,0 +1,11 @@
+<table>
+<tr><th>Game ID</th><th>X</th><th>O</th><th>Status</th></tr>
+<% FOREACH g IN games %>
+<tr>
+<td><% g.id %></td>
+<td><% g.x_player.name %></td>
+<td><% g.o_player.name %></td>
+<td><% g.status %></td>
+</tr>
+<% END %>
+</table>

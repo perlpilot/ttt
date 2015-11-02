@@ -1,0 +1,7 @@
+Initial development of the database was done by loading etc/ttt.sql into
+the sqlite3 command interpreter and then running dbicdump ...
+
+    $ sqlite3 etc/ttt.db
+    sqlite> .read 'etc/ttt.sql'
+    sqlite> .q
+    $ dbicdump -o dump_directory=./lib TicTacToe::Schema dbi:SQLite:etc/ttt.db

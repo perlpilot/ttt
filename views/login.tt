@@ -1,0 +1,7 @@
+<h1>Player Login</h1>
+<form method="post" action="">
+<p>Login name: <input type="text" name="player"></p>
+<p>Password: <input type="password" name="password"></p>
+<p><input type="submit" value="Play!"> </p>
+</form>
+<p><a href="/newplayer">New Player</a></p>

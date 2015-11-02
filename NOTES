@@ -1,0 +1,76 @@
+
+Requirements: Plan on spending somewhere in the ball park of 6 to 12
+hours. It’s really up to you, but I don’t want you to feel like you
+have to do every possible thing and end up spending 40 hours or
+something. Implement a web based API to keep track of a tic-tac-toe
+game. You should be able to accept moves, reject invalid moves, and
+determine when the game has ended. You have flexibility to make it work
+in any way you feel is best.
+
+Include installation and usage documentation. We should be able to get
+it up and running on a Linux machine here. (Sorry, it would be too hard
+to hunt down a Mac.) Include representative unit tests, but does not
+have to be 100% coverage. Use Dancer2 (https://metacpan.org/pod/Dancer2)
+as your web framework. Use DBIx::Class
+(https://metacpan.org/pod/DBIx::Class) as your db interface. In memory
+SQLite db is probably your simplest option. Try for more than one table
+so you can have a relationship.
+
+A UI is not required.
+
+-------
+
+= Design =
+
+routes:
+    ttt/game/new
+    ttt/game/list
+    ttt/game/new        - create new game, set x_player to current user
+    ttt/game/show/:gid  
+    ttt/game/join/:gid  - select game by id, set o_player to current user
+    ttt/game/move/:gid/:pos - select game by id and put X/O at some position
+
+    ttt/player/new/:name
+    ttt/player/list
+    ttt/player/:pid/login    ???
+    ttt/player/logout        ???
+
+tables:
+    games
+        game-id
+        player1-id (X)
+        player2-id (O)
+        board
+        status
+    players
+        player-id
+        player-name
+
+
+Database is in-memory SQLite, so games only exist as long as the app is running.
+X always moves first (player1 -> X, player2 -> O)
+Store board as a string of 9 characters
+3 possibilities: x, o, or .  (. are empty squares)
+Winning configurations:
+        xxx......   top row
+        ...xxx...   middle row
+        ......xxx   bottom row
+        x..x..x..   left column
+        .x..x..x.   middle column
+        ..x..x..x   right column
+        x...x...x   \ diagonal
+        ..x.x.x..   / diagonal
+        012345678
+
+
+
+Game Status
+
+    Game Over: X won
+    Game Over: O won
+    Game Over: Tie
+    X's turn
+    O's turn
+
+
+

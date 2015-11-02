@@ -1,0 +1,63 @@
+=head1 Tic Tac Toe API
+
+In order to make calls to the API, you must be logged in. Once logged in
+you'll be able to make API calls to query and/or update games accordingly.
+
+Each API call results in a JSON object returned to the client. If the
+object contains an attribute called "Error", then the API request has
+failed somehow and the value of the Error attribute will be a helpful
+string describing that failure.  Otherwise the JSON object returned
+will contain the requested data.
+
+=head2 Game API
+
+=over 4
+
+=item /game/list
+
+List all of the games that have been created. The JSON object returned
+will have a single attribute "games" that is a list of JSON objects 
+representing all games in the app.
+
+
+    {  
+       "games":[  
+          {  
+             "status": "X's turn",
+             "X Player":{  
+                "name":"Fred Flintstone",
+                "id":1
+             },
+             "O Player":{  
+                "name":"Barney Rubble",
+                "id":2
+             },
+             "id":1
+          },
+          ...
+       ]
+    }
+
+
+=item /game/show
+
+Return a JSON object representing an individual game:
+
+    {  
+        "status":1,
+        "X Player":{  
+            "name":"Fred Flintstone",
+            "id":1
+         },
+             "O Player":{  
+                "name":"Barney Rubble",
+                "id":2
+             },
+             "id":1
+          },
+
+
+=back
+
+
+=head2 Game API
