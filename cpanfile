@@ -1,6 +1,6 @@
 requires "Dancer2" => "0.163000";
 requires "Dancer2::Plugin::DBIC" => "0";
-requires "Dancer2::Plugin::Auth::tiny" => "0";
+requires "Dancer2::Plugin::Auth::Tiny" => "0";
 requires "Dancer2::Plugin::Deferred" => "0";
 requires "Crypt::SaltedHash" => "0";
 
