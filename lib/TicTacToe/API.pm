@@ -4,6 +4,7 @@ use 5.010;
 use Dancer2 appname => 'TicTacToe';
 use Dancer2::Plugin::DBIC qw< schema >;
 use Dancer2::Plugin::Auth::Tiny;
+use Dancer2::Plugin::SendAs;
 
 use constant { EMPTY_BOARD => '.' x 9 };
 
@@ -19,24 +20,24 @@ get '/game/new' => needs login => sub {
         board => EMPTY_BOARD,
         game_over => 0
     });
-    return to_json($game == 0 ? TTTError("unable to create new game") : $game->to_hashref);
+    return send_as json => $game == 0 ? TTTError("unable to create new game") : $game->to_hashref;
 };
 
 get '/game/list' => needs login => sub {
     my @games = schema->resultset('Game')->search->all;
-    return to_json { games => [ map { $_->to_hashref } @games ] }
+    return send_as json => { games => [ map { $_->to_hashref } @games ] }
 };
 
 get '/game/show/:gid' => needs login => sub {
     my $game = schema->resultset('Game')->find(param('gid'));
-    return to_json $game->to_hashref;
+    return send_as json => $game->to_hashref;
 };
 
 get '/game/join/:gid' => needs login => sub {
     my $user_id = session 'player_id';
     my $game = schema->resultset('Game')->find(param('gid'));
     $game->update({ o_player => $user_id });
-    return to_json $game->to_hashref;
+    return send_as json => $game->to_hashref;
 };
 
 get '/game/move/:gid/:pos' => needs login => sub {
@@ -54,18 +55,18 @@ get '/game/move/:gid/:pos' => needs login => sub {
     if ($game->is_winner('X') || $game->is_winner('O')) {
         $game->update({ game_over => 1 });
     }
-    return to_json $game->to_hashref;
+    return send_as json => $game->to_hashref;
 };
 
 
 get '/player/list' => needs login => sub {
     my @players = schema->resultset('Player')->search->all;
-    return to_json { players => [ map { $_->to_hashref } @players ] };
+    return send_as json => { players => [ map { $_->to_hashref } @players ] };
 };
 
 post '/player/new/:name' => needs login => sub {
     my $player = schema->resultset('Player')->create({ name => param('name') });
-    return to_json($player == 0 ? TTError("Unable to create new player") : $player->to_hashref);
+    return send_as json => $player == 0 ? TTError("Unable to create new player") : $player->to_hashref;
 };
 
 true

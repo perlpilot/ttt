@@ -2,6 +2,7 @@ requires "Dancer2" => "0.163000";
 requires "Dancer2::Plugin::DBIC" => "0";
 requires "Dancer2::Plugin::Auth::Tiny" => "0";
 requires "Dancer2::Plugin::Deferred" => "0";
+requires "Dancer2::Plugin::SendAs" => "0";
 requires "Crypt::SaltedHash" => "0";
 
 recommends "YAML"             => "0";
