@@ -1,0 +1,10 @@
+Installation
+
+Here are the sequence of commands used to get the app up and running.
+
+    $ git clone git://github.com/perlpilot/ttt.git
+    $ cd ttt
+    $ cpanm --installdeps .         # make sure we get all of the dependencies
+    $ cpanm --test-only .           # run the tests
+    $ plackup bin/app.psgi          # run the app
+
