@@ -36,8 +36,16 @@ get '/game/show/:gid' => needs login => sub {
 get '/game/join/:gid' => needs login => sub {
     my $user_id = session 'player_id';
     my $game = schema->resultset('Game')->find(param('gid'));
-    $game->update({ o_player => $user_id });
-    return send_as json => $game->to_hashref;
+    if ($game == 0) {
+        return send_as json => TTTError("no such game");
+    }
+    else {
+        if (defined($game->o_player)) {
+            return send_as json => TTTError("game full");
+        }
+        $game->update({ o_player => $user_id });
+        return send_as json => $game->to_hashref;
+    }
 };
 
 get '/game/move/:gid/:pos' => needs login => sub {
