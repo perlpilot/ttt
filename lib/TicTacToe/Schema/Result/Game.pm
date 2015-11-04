@@ -144,26 +144,33 @@ sub make_move {
     my $board = $self->board;
     substr($board, $pos-1, 1) = $mark;
     $self->board($board);
-
     # Update the game status on each move
-    if ($self->is_winner($mark)) {
-        $self->status("Game Over: $mark Wins");
-    }
-    else {
-        my $free = $board =~ tr/XO//;
-        if ($free == 0) {
-            $self->status("Game Over: Tie");
-        }
-        else {
-            $self->status($free % 2 == 0 ? "X's turn" : "O's turn");
-        }
-    }
-
+    $self->update_status;
     # write our updates to the database
     $self->update;
     return 1;
 }
 
+sub update_status {
+    my ($self) = @_;
+
+    if ($self->is_winner('X')) {
+        $self->status("Game Over: X Wins");
+    }
+    elsif ($self->is_winner('O')) {
+        $self->status("Game Over: O Wins");
+    }
+    else {
+        my $taken = $self->board =~ tr/XO//;
+        if ($taken == 9) {
+            $self->status("Game Over: Tie");
+        }
+        else {
+            $self->status($taken % 2 == 0 ? "X's turn" : "O's turn");
+        }
+    }
+
+}
 
 sub whose_turn {
     my ($self) = @_;
