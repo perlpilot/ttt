@@ -30,7 +30,7 @@ get '/game/list' => needs login => sub {
 
 get '/game/show/:gid' => needs login => sub {
     my $game = schema->resultset('Game')->find(param('gid'));
-    return send_as json => $game->to_hashref;
+    return send_as json => ($game == 0 ? TTTError("no such game") : $game->to_hashref);
 };
 
 get '/game/join/:gid' => needs login => sub {
