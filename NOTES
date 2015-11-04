@@ -20,7 +20,7 @@ A UI is not required.
 
 -------
 
-= Design =
+Design
 
 routes:
     ttt/game/new
@@ -38,8 +38,8 @@ routes:
 tables:
     games
         game-id
-        player1-id (X)
-        player2-id (O)
+        x_player (X)
+        o_player (O)
         board
         status
     players

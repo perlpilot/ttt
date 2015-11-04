@@ -48,10 +48,9 @@ __PACKAGE__->table("games");
   is_nullable: 0
   size: 9
 
-=head2 game_over
+=head2 status
 
-  data_type: 'boolean'
-  default_value: 0
+  data_type: 'string'
   is_nullable: 1
 
 =cut
@@ -70,8 +69,8 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 9,
   },
-  "game_over",
-  { data_type => "boolean", default_value => 0, is_nullable => 1 },
+  "status",
+  { data_type => "string", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY

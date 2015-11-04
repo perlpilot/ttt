@@ -18,7 +18,7 @@ get '/game/new' => needs login => sub {
     my $game = schema->resultset('Game')->create({
         x_player => $user_id,
         board => EMPTY_BOARD,
-        game_over => 0
+        status => "X's move",
     });
     return send_as json => $game == 0 ? TTTError("unable to create new game") : $game->to_hashref;
 };
