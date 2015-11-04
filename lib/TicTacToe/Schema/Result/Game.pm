@@ -138,10 +138,11 @@ use 5.010;
 sub make_move {
     my ($self, $mark, $pos) = @_;
     return 0 if $mark ne 'X' and $mark ne 'O';
+    return 0 if $self->status !~ /^$mark/;
     return 0 if $pos < 1 or $pos > 9;
-    return 0 if substr($self->board, $pos, 1) ne '.';
+    return 0 if substr($self->board, $pos-1, 1) ne '.';
     my $board = $self->board;
-    substr($board, $pos, 1) = $mark;
+    substr($board, $pos-1, 1) = $mark;
     $self->board($board);
 
     # Update the game status on each move
@@ -149,12 +150,12 @@ sub make_move {
         $self->status("Game Over: $mark Wins");
     }
     else {
-        my $free = $board =~ tr/XO//c;
+        my $free = $board =~ tr/XO//;
         if ($free == 0) {
             $self->status("Game Over: Tie");
         }
         else {
-            return $free % 2 == 0 ? "X's turn" : "O's turn";
+            $self->status($free % 2 == 0 ? "X's turn" : "O's turn");
         }
     }
 
