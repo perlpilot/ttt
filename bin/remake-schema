@@ -1,0 +1,6 @@
+#!/bin/bash
+
+DBFILE=/tmp/ttt-$$.db
+echo ".read 'etc/ttt.sql'" | sqlite3 $DBFILE
+dbicdump -o dump_directory=./lib TicTacToe::Schema dbi:SQLite:$DBFILE
+rm -f $DBFILE
