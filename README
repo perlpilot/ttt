@@ -62,7 +62,7 @@ If the game ID can not be found, an error object is returned:
 
 List all of the games that have been created. The JSON object returned
 will have a single attribute "games" that is a list of JSON objects 
-representing all games in the app.
+representing all individul games in the app.
 
 
     {  
@@ -87,6 +87,59 @@ If there are no games, the list is appropriately empty:
 
     {
         "games":[]
+    }
+
+=item /game/join/:game_id
+
+Sets the O player to the current user. Returns a JSON object
+representing the game that was joined.
+
+    {
+      "board": ".........",
+      "status": "X's move",
+      "O Player": {
+        "id": 1,
+        "name": "duff"
+      },
+      "id": 1,
+      "X Player": {
+        "id": 2,
+        "name": "fred"
+      }
+    }
+
+If the game can not be found, an Error object is returned:
+
+    {
+      "Error": "no such game"
+    }
+
+If there is already an O player the following error object is returned:
+
+    {
+      "Error": "game full"
+    }
+
+=item /game/move/:game_id/:position
+
+Make a move in the game specified.
+
+=item /player/list
+
+List all players. The JSON object will have a single attribute "players"
+that is a list of JSON objects representing individual players in the app:
+
+    {
+      "players": [{
+        "name": "fred",
+        "id": 1
+      }, {
+        "name": "barney",
+        "id": 2
+      }, {
+        "name": "george",
+        "id": 3
+      }]
     }
 
 =back
