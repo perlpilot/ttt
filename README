@@ -1,0 +1,95 @@
+=head1 Tic Tac Toe API
+
+In order to make calls to the API, you must be logged in. Once logged in
+you'll be able to make API calls to query and/or update games accordingly.
+
+Each API call results in a JSON object returned to the client. If the
+object contains an attribute called "Error", then the API request has
+failed somehow and the value of the Error attribute will be a helpful
+string describing that failure.  Otherwise the JSON object returned
+will contain the requested data.
+
+=head2 Game API
+
+=over 4
+
+=item /game/new
+
+Create a new game. Sets the X player to the current user. Returns a JSON
+object representing the game. An example of what the JSON object may
+look like is:
+
+    {
+      "id": 2,
+      "X Player": {
+        "id": 1,
+        "name": "Fred"
+      },
+      "status": "X's move",
+      "board": ".........",
+      "O Player": "-"
+    }
+
+There is no O player until another player joins the game. The tic-tac-
+toe board is initialized with 9 dots to represent the 9 empty squares
+where players may place their marks (either an X or an O).
+
+=item /game/show/:game_id
+
+Show a single game by id.  Return a JSON object representing an individual game:
+
+    {
+      "O Player": {
+        "id": 1,
+        "name": "duff"
+      },
+      "X Player": {
+        "id": 2,
+        "name": "fred"
+      },
+      "id": 1,
+      "board": ".........",
+      "status": "X's move"
+    }
+
+If the game ID can not be found, an error object is returned:
+
+    {
+      "Error": "no such game"
+    }
+
+=item /game/list
+
+List all of the games that have been created. The JSON object returned
+will have a single attribute "games" that is a list of JSON objects 
+representing all games in the app.
+
+
+    {  
+       "games":[  
+          {  
+             "status": "X's turn",
+             "X Player":{  
+                "name":"Fred",
+                "id":1
+             },
+             "O Player":{  
+                "name":"Barney",
+                "id":2
+             },
+             "id":1
+          },
+          ...
+       ]
+    }
+
+If there are no games, the list is appropriately empty:
+
+    {
+        "games":[]
+    }
+
+=back
+
+
+=head2 Game API
