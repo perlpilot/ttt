@@ -8,3 +8,4 @@ Here are the sequence of commands used to get the app up and running.
     $ prove -l                      # run tests
     $ plackup bin/app.psgi          # run the app
 
+The USAGE file contains descriptions of the routes available in the app
