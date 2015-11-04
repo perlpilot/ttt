@@ -2,9 +2,6 @@ use 5.010;
 use strict;
 use warnings;
 
-use Data::Printer;
-use Data::Dumper;
-
 BEGIN { $ENV{'DANCER_ENVIRONMENT'} = 'testing' }
 
 use TicTacToe;
