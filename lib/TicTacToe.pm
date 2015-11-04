@@ -7,7 +7,7 @@ use Crypt::SaltedHash;
 
 our $VERSION = '0.1';
 
-sub deploy { schema->deploy; }
+sub deploy { schema->deploy; return schema }
 
 get '/' => needs login => sub {
     my $games = schema->resultset('Game')->search->all;

@@ -47,26 +47,17 @@ get '/game/move/:gid/:pos' => needs login => sub {
     my $game = schema->resultset('Game')->find(param('gid'));
     return TTTError("Unknown Game: " . param('gid')) if $game == 0;
     return TTTError("Not your turn") if $game->whose_turn != $user_id;
-    my $char = $user_id == $game->xplayer ? 'X' : 'O';
-    my @board = split //, $game->board;
-    return TTTError("Invalid move") if $board[$pos] eq 'X' || $board[$pos] eq 'O';
-    $board[$pos] = $char;
-    $game->update({ board => join('',@board) });
-    if ($game->is_winner('X') || $game->is_winner('O')) {
-        $game->update({ game_over => 1 });
+    my $mark = $user_id == $game->x_player ? 'X' : 'O';
+    if ($game->make_move($mark, $pos)) {
+        return send_as json => $game->to_hashref;
+    } else {
+        return TTTError("Invalid move");
     }
-    return send_as json => $game->to_hashref;
 };
-
 
 get '/player/list' => needs login => sub {
     my @players = schema->resultset('Player')->search->all;
     return send_as json => { players => [ map { $_->to_hashref } @players ] };
-};
-
-post '/player/new/:name' => needs login => sub {
-    my $player = schema->resultset('Player')->create({ name => param('name') });
-    return send_as json => $player == 0 ? TTError("Unable to create new player") : $player->to_hashref;
 };
 
 true

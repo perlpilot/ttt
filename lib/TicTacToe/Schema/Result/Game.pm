@@ -128,19 +128,46 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-11-02 00:59:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JHnp1eXlFZHbwuNYhEZpGQ
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2015-11-03 22:29:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gV7gohcUjGugL8e64DAjnw
 
 use 5.010;
 
+# returns a true value if the move can be made and a false value if
+# it can not
+sub make_move {
+    my ($self, $mark, $pos) = @_;
+    return 0 if $mark ne 'X' and $mark ne 'O';
+    return 0 if $pos < 1 or $pos > 9;
+    return 0 if substr($self->board, $pos, 1) ne '.';
+    my $board = $self->board;
+    substr($board, $pos, 1) = $mark;
+    $self->board($board);
+
+    # Update the game status on each move
+    if ($self->is_winner($mark)) {
+        $self->status("Game Over: $mark Wins");
+    }
+    else {
+        my $free = $board =~ tr/XO//c;
+        if ($free == 0) {
+            $self->status("Game Over: Tie");
+        }
+        else {
+            return $free % 2 == 0 ? "X's turn" : "O's turn";
+        }
+    }
+
+    # write our updates to the database
+    $self->update;
+    return 1;
+}
+
+
 sub whose_turn {
     my ($self) = @_;
-    return -1 if $self->game_over;
-    my $board = $self->board;
-    my $count = $board =~ tr/XO//;
-    return -1 if $count == 9;               # no more moves
-    return -1 if $self->is_winner('X') or $self->is_winner('O');
-    return $count % 2 == 0 ? $self->x_player->id : $self->o_player->id;
+    return -1 if $self->status =~ /game over/i;
+    $self->status =~ /^X/ ? $self->x_player->player_id : $self->o_player->player_id;
 }
 
 sub to_hashref {
@@ -158,39 +185,15 @@ my @winning_positions = (
     [0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]
 );
 
-# $side should be "X" or "O"
+# $mark should be "X" or "O"
 sub is_winner {
-    my ($self, $side) = @_;
+    my ($self, $mark) = @_;
     
     my @board = split //, $self->board;
     for my $winner (@winning_positions) {
-        return 1 if join("", @board[@{$winner}]) eq $side x 3
+        return 1 if join("", @board[@{$winner}]) eq $mark x 3
     }
     return 0;
-}
-
-# Returns one of the following strings:
-#   Game Over: Tie
-#   Game Over: X wins
-#   Game Over: O wins
-#   X's turn
-#   O's turn
-sub status {
-    my ($self) = @_;
-    my $whose_turn = $self->whose_turn;
-    if ($whose_turn == -1) {
-        my $status = "Game Over: ";
-        if ($self->is_winner('X'))  { $status .= "X wins" }
-        if ($self->is_winner('O'))  { $status .= "O wins" }
-        else                        { $status .= "Tie" }
-        return $status;
-    } elsif ($whose_turn == $self->x_player->id) {
-        return "X's turn";
-    } elsif ($whose_turn == $self->o_player->id) {
-        return "O's turn";
-    } else {
-        return "Unknown Error";
-    }
 }
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
