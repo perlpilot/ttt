@@ -37,7 +37,7 @@ routes:
 
 tables:
     games
-        game-id
+        game_id
         x_player (X)
         o_player (O)
         board
