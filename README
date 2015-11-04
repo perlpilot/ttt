@@ -122,7 +122,15 @@ If there is already an O player the following error object is returned:
 
 =item /game/move/:game_id/:position
 
-Make a move in the game specified.
+Make a move in the game specified. The squares of the tic-tac-toe board
+are numbered from left to right and top to bottom starting from the
+number 1. If the game can not be foudn, the move is rejected. If a move
+is requested that is less than 1 or greater than 9, it is rejected. If
+it is not the current user's turn, the move is also rejected.
+If the move is successful, the game status is updated.
+
+Returns a JSON object representing the game after the move has been
+completed.
 
 =item /player/list
 
